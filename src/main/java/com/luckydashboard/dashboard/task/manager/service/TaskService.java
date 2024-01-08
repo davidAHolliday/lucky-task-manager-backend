@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -98,4 +99,34 @@ public class TaskService {
 
         }
     }
+
+    public Task deleteTaskById(String taskId) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            taskRepository.deleteById(taskId);
+            return task;
+        } else {
+            throw new NoSuchElementException("Task not found with ID: " + taskId);
+        }
+    }
+
+    public Task deleteNoteById(String taskId, String noteId) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            List<Note> notes = task.getNotes(); // Assuming getNotes() returns a List<Note>
+
+            // Remove the Note with the given noteId from the list
+            notes.removeIf(note -> note.getNoteId().equals(noteId)); // Assuming Note has getId() method
+
+            // Save the updated task with the removed note (if needed)
+            taskRepository.save(task);
+
+            return task;
+        } else {
+            throw new NoSuchElementException("Task not found with ID: " + taskId);
+        }
+    }
+
 }

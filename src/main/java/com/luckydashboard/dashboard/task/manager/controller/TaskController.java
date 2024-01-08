@@ -26,6 +26,19 @@ public class TaskController {
         return ResponseEntity.accepted().body(response);
     }
 
+    @DeleteMapping("/task/{taskId}")
+    public ResponseEntity<Task> deleteTaskById (@PathVariable String taskId){
+        Task response = taskService.deleteTaskById(taskId);
+        return ResponseEntity.accepted().body(response);
+    }
+
+    @DeleteMapping("/note/{taskId}/{noteId}")
+    public ResponseEntity<Task> deleteNoteById (@PathVariable String taskId, @PathVariable String noteId){
+        Task response = taskService.deleteNoteById(taskId, noteId);
+        return ResponseEntity.accepted().body(response);
+    }
+
+
     @PostMapping("/")
     public ResponseEntity<Task> createNewTask (@RequestBody Task task){
         Task response = taskService.createNewTask(task);
