@@ -1,0 +1,15 @@
+image: gradle:7.3.3-jdk11
+
+stages:
+  - build
+  - deploy
+
+build_job:
+  stage: build
+  script:
+    - ./gradlew clean build
+
+deploy_job:
+  stage: deploy
+  script:
+    - gcloud app deploy path_to_your_app_directory/app.yaml

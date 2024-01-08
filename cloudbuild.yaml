@@ -1,0 +1,6 @@
+steps:
+  - name: 'gradle:7.3.3-jdk11'
+    args: ['gradlew', 'clean', 'build']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy']
+    dir: 'path_to_your_app_directory'
