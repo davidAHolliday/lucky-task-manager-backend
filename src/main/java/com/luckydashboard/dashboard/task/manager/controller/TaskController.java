@@ -1,6 +1,7 @@
 package com.luckydashboard.dashboard.task.manager.controller;
 
 
+import com.luckydashboard.dashboard.task.manager.model.CheckListItem;
 import com.luckydashboard.dashboard.task.manager.model.Note;
 import com.luckydashboard.dashboard.task.manager.model.Task;
 import com.luckydashboard.dashboard.task.manager.service.TaskService;
@@ -38,6 +39,12 @@ public class TaskController {
         return ResponseEntity.accepted().body(response);
     }
 
+    @DeleteMapping("/checklist/{taskId}/{index}")
+    public ResponseEntity<Task> deleteChecklistItemById (@PathVariable String taskId, @PathVariable int index){
+        Task response = taskService.deleteCheckListByTaskIdAndIndex(taskId, index);
+        return ResponseEntity.accepted().body(response);
+    }
+
 
     @PostMapping("/")
     public ResponseEntity<Task> createNewTask (@RequestBody Task task){
@@ -56,6 +63,20 @@ public class TaskController {
         Task response = taskService.updateNotes(taskId,notes);
         return ResponseEntity.accepted().body(response);
     }
+
+    @PutMapping("/checklist/{taskId}")
+    public ResponseEntity<Task> addChecklistItem (@PathVariable String taskId, @RequestBody CheckListItem listItem){
+        Task response = taskService.createCustomList(taskId,listItem);
+        return ResponseEntity.accepted().body(response);
+    }
+
+    @PutMapping("/checklist/{taskId}/{index}/{bool}")
+    public ResponseEntity<Task> updateBoolChecklist (@PathVariable String taskId, @PathVariable int index, @PathVariable boolean bool){
+        Task response = taskService.updateChecklistByIndexAndTaskId(taskId,index,bool);
+        return ResponseEntity.accepted().body(response);
+    }
+
+
 
     @GetMapping("/task/{taskId}")
     public  ResponseEntity<Task> getTaskById (@PathVariable String taskId){

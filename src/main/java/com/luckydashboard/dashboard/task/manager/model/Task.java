@@ -20,13 +20,9 @@ private String taskId;
     private String status;
     private Date dueDate;
     private Date timeClosed;
-    private ArrayList<ListItem> listItems;
+    private ArrayList<CheckListItem> checkListItems;
 
 
 }
 
 
-class ListItem {
-    String itemText;
-    boolean doneStatus;
-}
