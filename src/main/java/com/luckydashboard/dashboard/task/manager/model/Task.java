@@ -2,6 +2,8 @@ package com.luckydashboard.dashboard.task.manager.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Data
@@ -18,6 +20,13 @@ private String taskId;
     private String status;
     private Date dueDate;
     private Date timeClosed;
+    private ArrayList<ListItem> listItems;
+
 
 }
 
+
+class ListItem {
+    String itemText;
+    boolean doneStatus;
+}

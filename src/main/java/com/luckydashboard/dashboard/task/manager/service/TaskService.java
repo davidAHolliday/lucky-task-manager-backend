@@ -1,6 +1,7 @@
 package com.luckydashboard.dashboard.task.manager.service;
 
 
+import ch.qos.logback.core.pattern.parser.OptionTokenizer;
 import com.luckydashboard.dashboard.task.manager.data.TaskRepository;
 import com.luckydashboard.dashboard.task.manager.model.Note;
 import com.luckydashboard.dashboard.task.manager.model.Task;
@@ -128,5 +129,31 @@ public class TaskService {
             throw new NoSuchElementException("Task not found with ID: " + taskId);
         }
     }
+    public Task updateTaskById(String taskId, Task taskPayload) {
+        // Fetch the task by ID from the database
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
 
-}
+        if (optionalTask.isPresent()) {
+            // Get the existing task object from the optional wrapper
+            Task existingTask = optionalTask.get();
+
+            // Update the task description and other fields with the values from the payload
+           existingTask.setTaskName(taskPayload.getTaskName());
+            existingTask.setTaskDescription(taskPayload.getTaskDescription());
+            existingTask.setDueDate(taskPayload.getDueDate());
+            existingTask.setAssignedTo(taskPayload.getAssignedTo());
+            existingTask.setTags(taskPayload.getTags());
+            existingTask.setListItems(taskPayload.getListItems());
+
+            // Save the updated task object to the database
+            Task updatedTask = taskRepository.save(existingTask);
+
+            // Return the updated task object
+            return updatedTask;
+        } else {
+            // If the task is not found, throw a NoSuchElementException
+            throw new NoSuchElementException("Task not found with ID: " + taskId);
+        }
+    }
+
+   }

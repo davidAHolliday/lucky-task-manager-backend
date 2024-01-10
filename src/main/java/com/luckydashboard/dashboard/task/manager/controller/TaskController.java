@@ -63,6 +63,12 @@ public class TaskController {
         return ResponseEntity.accepted().body(response);
     }
 
+    @PutMapping("/task/update/{taskId}")
+    public  ResponseEntity<Task> updateTaskById (@PathVariable String taskId, @RequestBody Task task){
+        Task response = taskService.updateTaskById(taskId, task);
+        return ResponseEntity.accepted().body(response);
+    }
+
 
     @PutMapping("/tags/{taskId}/")
     public ResponseEntity<Task> addTags (@PathVariable String taskId, @RequestBody List<String> tags){
