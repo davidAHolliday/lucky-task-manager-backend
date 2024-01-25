@@ -9,6 +9,8 @@ public class DOALoanSummary {
 
     private Loan loan;
 
+    private double paymentAmount;
+
     private double balance;
 
     private double paymentsleft;

@@ -95,12 +95,22 @@ else{
                 DOALoanSummary summary = new DOALoanSummary();
                 summary.setClient(clientObj);
                 summary.setLoan(loan);
-                double paymentAmount = loan.getTransactions().stream()
+                double totalPayments = loan.getTransactions().stream()
+                        .filter(transaction -> "Payment".equals(transaction.getType()))
                         .mapToDouble(TransactionModal::getAmount)
                         .sum();
 
-                double balance = loan.getOriginalAmount() - paymentAmount;
+                //Add interest to original payment for total amount due
+                double totalAmountDue = loan.getOriginalAmount() * (1 +loan.getInterestRate());
+
+                //new balance with interest added and skip payments
+                double balance = totalAmountDue - totalPayments;
                 summary.setBalance(balance);
+
+                double paymentAmount = totalAmountDue/loan.getTerm();
+summary.setPaymentAmount(paymentAmount);
+
+                summary.setPaymentsleft(balance/paymentAmount);
 
                 return summary;
 
