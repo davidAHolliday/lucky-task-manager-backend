@@ -1,14 +1,9 @@
 package com.luckydashboard.dashboard.task.manager.service;
 
 
-import com.luckydashboard.dashboard.task.manager.data.ClientRepository;
-import com.luckydashboard.dashboard.task.manager.data.LoanRepository;
-import com.luckydashboard.dashboard.task.manager.data.TaskRepository;
-import com.luckydashboard.dashboard.task.manager.data.TransactionModelRepository;
+import com.luckydashboard.dashboard.task.manager.data.*;
 import com.luckydashboard.dashboard.task.manager.model.*;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,11 +14,14 @@ public class LoanService {
 
     private final TransactionModelRepository transactionModelRepository;
 
+    private final AdminRepository   adminRepository;
+
     private final LoanRepository loanRepository;
 
-    public LoanService(TaskRepository taskRepository, ClientRepository clientRepository, TransactionModelRepository transactionModelRepository, LoanRepository loanRepository){
+    public LoanService(TaskRepository taskRepository, ClientRepository clientRepository, TransactionModelRepository transactionModelRepository, AdminRepository adminRepository, LoanRepository loanRepository){
         this.clientRepository = clientRepository;
         this.transactionModelRepository = transactionModelRepository;
+        this.adminRepository = adminRepository;
         this.loanRepository = loanRepository;
     }
 
@@ -123,5 +121,37 @@ summary.setPaymentAmount(paymentAmount);
             throw new IllegalArgumentException("Loan Id with ID " + loanId + " is not found");
 
         }
+    }
+
+    public Admin getCollectionAmount() {
+        List<Admin> info = adminRepository.findAll();
+        return info.get(0);
+
+    }
+
+    public Admin updateCollectionAmount(double amount) {
+        Optional<Admin> recordsOptional = adminRepository.findById("0");
+        if(recordsOptional.isEmpty()){
+            Admin newAdminObj = new Admin();
+            newAdminObj.setId("0");
+            newAdminObj.setDailyCollection(amount);
+            adminRepository.save(newAdminObj);
+        }else{
+            Admin record = recordsOptional.get();
+            record.setDailyCollection(record.getDailyCollection()+amount);
+            return adminRepository.save(record);
+        }
+return null;
+
+    }
+
+    public Admin resetCollectionAmount() {
+        Optional<Admin> record = adminRepository.findById("0");
+        if(record.isPresent()){
+           Admin rec = record.get();
+            rec.setDailyCollection(0);
+            return adminRepository.save(rec);
+        }
+        return null;
     }
 }

@@ -19,6 +19,25 @@ public class BankingController {
         this.loanService = loanService;
     }
 
+
+    @GetMapping("/admin")
+    public ResponseEntity<Admin> getCollectionAmount (){
+        Admin response = loanService.getCollectionAmount();
+        return ResponseEntity.accepted().body(response);
+    }
+
+    @PutMapping("/admin/collections/{amount}")
+    public ResponseEntity<Admin> updateCollectionAmount (@PathVariable double amount){
+        Admin response = loanService.updateCollectionAmount(amount);
+        return ResponseEntity.accepted().body(response);
+    }
+
+    @PutMapping("/admin/collections/reset")
+    public ResponseEntity<Admin> resetCollectionAmount (){
+        Admin response = loanService.resetCollectionAmount();
+        return ResponseEntity.accepted().body(response);
+    }
+
     @GetMapping("/loans")
     public ResponseEntity<List<Loan>> getAllLoans (){
         List<Loan> response = loanService.getAllLoans();
