@@ -1,6 +1,8 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gradle'
-    args: ['clean', 'build']
+  - steps:
+      - name: 'openjdk:16'
+        args: [ 'gradle', 'build' ]
+
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['app', 'deploy']
 
