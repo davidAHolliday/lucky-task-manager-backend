@@ -20,6 +20,11 @@ public class BankingController {
     }
 
 
+    @GetMapping("/test")
+    public ResponseEntity<String> returnString (){
+        String response = "It works";
+        return ResponseEntity.accepted().body(response);
+    }
     @GetMapping("/admin")
     public ResponseEntity<Admin> getCollectionAmount (){
         Admin response = loanService.getCollectionAmount();
