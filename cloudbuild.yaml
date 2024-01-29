@@ -2,5 +2,8 @@ steps:
   - name: 'gradle:7.6-jdk17'
     args: ['bash', '-c', 'chmod +x gradlew && ./gradlew build']
 
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy']
+
 options:
   logging: CLOUD_LOGGING_ONLY
