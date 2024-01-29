@@ -16,5 +16,6 @@ public class Admin {
     private String id;
     private double initalInvestment;
     private double dailyCollection;
+    private  int numberOfActiveLoans;
   }
 
