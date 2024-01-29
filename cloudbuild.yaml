@@ -1,9 +1,9 @@
 steps:
-  - name: 'gradle:7-jdk16'
-    args: ['gradle', 'build']
+  - name: 'gradle:7.6-jdk17'
+    args: [ 'build']
 
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['app', 'deploy']
+  - entrypoint: gradle
+
 
 options:
   logging: CLOUD_LOGGING_ONLY
