@@ -1,5 +1,5 @@
 steps:
-  - name: 'openjdk:16'
+  - name: 'gradle:7-jdk16'
     args: ['gradle', 'build']
 
   - name: 'gcr.io/cloud-builders/gcloud'
