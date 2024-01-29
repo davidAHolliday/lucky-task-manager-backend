@@ -1,6 +1,6 @@
 steps:
   - name: 'gradle:7.6-jdk17'
-    args: ['build']
+    args: ['bash', '-c', './gradlew build']
 
 options:
   logging: CLOUD_LOGGING_ONLY
