@@ -60,6 +60,12 @@ public class BankingController {
         return ResponseEntity.accepted().body(response);
     }
 
+    @DeleteMapping("/transactions/{id}")
+    public ResponseEntity<TransactionModal> deleteTransactionById (@PathVariable String id){
+        TransactionModal response = loanService.deleteTransactionById( id);
+        return ResponseEntity.accepted().body(response);
+    }
+
 
 
     @PostMapping("/clients")

@@ -35,16 +35,17 @@ public class LoanService {
         Optional<Loan> optionalLoan = loanRepository.findById(transaction.getLoanId());
         if(optionalLoan.isPresent()){
             Loan loan = optionalLoan.get();
+            transaction.setCreateDate(new Date()); // Set current date and time
+            TransactionModal newTrans = transactionModelRepository.save(transaction);
             List<TransactionModal> transactions = loan.getTransactions();
-            transactions.add(transaction);
+            transactions.add(newTrans);
             loan.setTransactions(transactions);
             loanRepository.save(loan);
         }else {
             throw new IllegalArgumentException("Loan with ID " + transaction.getLoanId() + " not found");
         }
 
-        transaction.setCreateDate(new Date()); // Set current date and time
-        return transactionModelRepository.save(transaction);
+        return transaction;
     }
 
     //Create Clients
@@ -153,5 +154,18 @@ return null;
             return adminRepository.save(rec);
         }
         return null;
+    }
+
+    public TransactionModal deleteTransactionById(String id) {
+        Optional<TransactionModal> optionalTransactions = transactionModelRepository.findById(id);
+        if(optionalTransactions.isPresent()){
+            TransactionModal res = optionalTransactions.get();
+            transactionModelRepository.deleteById(id);
+            return res;
+        }
+        else{
+            throw new IllegalArgumentException("Transaction Id with ID " + id + " is not found");
+
+        }
     }
 }
