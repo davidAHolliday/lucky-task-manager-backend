@@ -19,10 +19,6 @@ public class Loan {
     private double originalAmount;
     private double interestRate;
     private int term;
-    private List<TransactionModal> transactions = new ArrayList<>();
 
-    public void addTransaction(TransactionModal transaction){
-        transactions.add(transaction);
-    }
 }
 

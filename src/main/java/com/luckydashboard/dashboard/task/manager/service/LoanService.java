@@ -37,9 +37,6 @@ public class LoanService {
             Loan loan = optionalLoan.get();
             transaction.setCreateDate(new Date()); // Set current date and time
             TransactionModal newTrans = transactionModelRepository.save(transaction);
-            List<TransactionModal> transactions = loan.getTransactions();
-            transactions.add(newTrans);
-            loan.setTransactions(transactions);
             loanRepository.save(loan);
         }else {
             throw new IllegalArgumentException("Loan with ID " + transaction.getLoanId() + " not found");
@@ -59,7 +56,8 @@ public class LoanService {
 
     //Create Loans
     public List<Loan> getAllLoans(){
-        return loanRepository.findAll();
+        List<Loan> loans = loanRepository.findAll();
+        return loans.stream().filter(x-> x.isActive()!= false).toList();
 
     }
     public Loan createNewLoan(Loan loan) {
@@ -94,10 +92,14 @@ else{
                 DOALoanSummary summary = new DOALoanSummary();
                 summary.setClient(clientObj);
                 summary.setLoan(loan);
-                double totalPayments = loan.getTransactions().stream()
+                List<TransactionModal> transactions = transactionModelRepository.findAll();
+                List<TransactionModal> userTransastions = transactions.stream().filter(x-> Objects.equals(x.getLoanId(), loanId)).toList();
+                double totalPayments = userTransastions.stream()
                         .filter(transaction -> "Payment".equals(transaction.getType()))
                         .mapToDouble(TransactionModal::getAmount)
                         .sum();
+
+                System.out.println(totalPayments);
 
                 //Add interest to original payment for total amount due
                 double totalAmountDue = loan.getOriginalAmount() * (1 +loan.getInterestRate());
@@ -166,6 +168,19 @@ return null;
         else{
             throw new IllegalArgumentException("Transaction Id with ID " + id + " is not found");
 
+        }
+    }
+
+    public Loan updateLoanToInactive(String id) {
+        Optional<Loan> findLoan = loanRepository.findById(id);
+        if(findLoan.isPresent()){
+            Loan foundLoan = findLoan.get();
+            foundLoan.setActive(false);
+            loanRepository.save(foundLoan);
+            return foundLoan;
+
+        }else{
+            return null;
         }
     }
 }

@@ -80,6 +80,13 @@ public class BankingController {
         return ResponseEntity.accepted().body(response);
     }
 
+    @PutMapping("/loans/{id}/inactive")
+    public ResponseEntity<Loan> updateLoanToInactive (@PathVariable String id){
+        Loan response = loanService.updateLoanToInactive(id);
+        return ResponseEntity.accepted().body(response);
+    }
+
+
     @PostMapping("/transactions")
     public ResponseEntity<TransactionModal> createNewClient (@RequestBody TransactionModal transactionModal){
         TransactionModal response = loanService.createNewTransaction(transactionModal);
