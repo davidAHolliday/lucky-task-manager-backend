@@ -6,9 +6,14 @@ import com.luckydashboard.dashboard.task.manager.model.Note;
 import com.luckydashboard.dashboard.task.manager.model.Task;
 import com.luckydashboard.dashboard.task.manager.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.ui.Model;
 
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -77,7 +82,6 @@ public class TaskController {
     }
 
 
-
     @GetMapping("/task/{taskId}")
     public  ResponseEntity<Task> getTaskById (@PathVariable String taskId){
         Task response = taskService.getTaskById(taskId);
@@ -97,7 +101,13 @@ public class TaskController {
         return ResponseEntity.accepted().body(updatedTask);
     }
 
+    @PostMapping("/photo/{taskId}/{index}")
+    public ResponseEntity<String> addPhoto (@PathVariable String taskId, @PathVariable String index,@RequestParam String title,@RequestParam("image") MultipartFile image, Model model) throws IOException {
+        String message = taskService.addPhoto(taskId,Integer.parseInt(index),title,image);
 
+
+        return ResponseEntity.accepted().body(message) ;
+    }
 
 
 }

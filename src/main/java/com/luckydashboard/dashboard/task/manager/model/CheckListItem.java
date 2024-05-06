@@ -7,5 +7,6 @@ public class CheckListItem {
     private String itemText;
     private int index;
     private boolean doneStatus;
-
+    private Photo photo;
 }
+

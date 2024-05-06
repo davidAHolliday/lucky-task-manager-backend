@@ -4,10 +4,15 @@ package com.luckydashboard.dashboard.task.manager.service;
 import com.luckydashboard.dashboard.task.manager.data.TaskRepository;
 import com.luckydashboard.dashboard.task.manager.model.CheckListItem;
 import com.luckydashboard.dashboard.task.manager.model.Note;
+import com.luckydashboard.dashboard.task.manager.model.Photo;
 import com.luckydashboard.dashboard.task.manager.model.Task;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -226,4 +231,39 @@ public class TaskService {
         }
     }
 
-   }
+
+
+    public String addPhoto(String taskId, int index, String title, MultipartFile file) throws IOException {
+        Optional<Task> currentTaskOpt = taskRepository.findById(taskId);
+        if (currentTaskOpt.isPresent()) {
+            Task currentTask = currentTaskOpt.get();
+            List<CheckListItem> checkListItems = currentTask.getCheckListItems();
+            if (index >= 0 && index < checkListItems.size()) {
+                CheckListItem currentCheckList = checkListItems.get(index);
+
+                Photo photo = new Photo(title);
+                photo.setImage(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+
+                currentCheckList.setPhoto(photo);
+                taskRepository.save(currentTask);
+                return "Photo added successfully";
+            } else {
+                return "Invalid index provided";
+            }
+        } else {
+            return "Task not found";
+        }
+    }
+
+    public Photo getPhoto(String id,int index) {
+        Optional<Task> cTask = taskRepository.findById(id);
+        if (cTask.isPresent()) {
+            Task currentTask = cTask.get();
+            CheckListItem currentItem = currentTask.getCheckListItems().get(index);
+            return currentItem.getPhoto();
+        }
+        return null;
+    }
+
+
+}
